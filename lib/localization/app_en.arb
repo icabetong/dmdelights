@@ -1,0 +1,14 @@
+{
+    "app_name": "DM Delights",
+    "field_email": "Email",
+    "field_password": "Password",
+    "field_retype_password": "Retype Password",
+    "field_accept_terms": "I accept Terms and Conditions",
+    "field_lastname": "Last Name",
+    "field_firstname": "First Name",
+    "field_address": "Address",
+    "button_signin": "Login",
+    "button_signup": "Register",
+    "button_forgot_password": "Forgot Password",
+    "feedback_authenticating": "Authenticating"
+}
