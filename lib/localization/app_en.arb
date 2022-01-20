@@ -16,6 +16,7 @@
     "button_signout": "Logout",
     "button_forgot_password": "Forgot Password",
     "feedback_authenticating": "Authenticating",
+    "feedback_error_generic": "An Error Occured",
     "terms_and_conditions": "Terms and Conditions",
     "privacy_policy": "Privacy Policy"
 }

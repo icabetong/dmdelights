@@ -1,5 +1,6 @@
 import 'package:dm_delights/auth/auth.dart';
 import 'package:dm_delights/cart/cart.dart';
+import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/home/home.dart';
 import 'package:dm_delights/shared/custom/state.dart';
 import 'package:dm_delights/core/supabase.dart';
@@ -8,12 +9,12 @@ import 'package:dm_delights/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Supabase.initialize(url: Backend.URL, anonKey: Backend.ANON_KEY);
+  await Backend.init();
   runApp(const DMDelights());
 }
 
@@ -21,24 +22,31 @@ class DMDelights extends StatelessWidget {
   const DMDelights({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DM Delights',
-      theme: light,
-      supportedLocales: Locales.all,
-      localizationsDelegates: const [
-        Translations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CategoryNotifier>(
+          create: (_) => CategoryNotifier(),
+        )
       ],
-      onGenerateTitle: (context) => Translations.of(context)!.app_name,
-      initialRoute: '/',
-      routes: <String, WidgetBuilder>{
-        '/': (_) => const StartupPage(),
-        '/auth': (_) => const AuthPage(),
-        '/app': (_) => const HomePage(),
-        '/cart': (_) => const CartPage(),
-      },
+      child: MaterialApp(
+        title: 'DM Delights',
+        theme: light,
+        supportedLocales: Locales.all,
+        localizationsDelegates: const [
+          Translations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        onGenerateTitle: (context) => Translations.of(context)!.app_name,
+        initialRoute: '/',
+        routes: <String, WidgetBuilder>{
+          '/': (_) => const StartupPage(),
+          '/auth': (_) => const AuthPage(),
+          '/home': (_) => const HomePage(),
+          '/cart': (_) => const CartPage(),
+        },
+      ),
     );
   }
 }

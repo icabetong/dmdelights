@@ -15,7 +15,7 @@ class SignInFragment extends StatefulWidget {
 
 class _SignInFragmentState extends AuthState<SignInFragment> {
   bool _isLoading = false;
-  bool _showPassword = false;
+  bool _showPassword = true;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
@@ -36,7 +36,9 @@ class _SignInFragmentState extends AuthState<SignInFragment> {
     );
     final error = response.error;
     if (error != null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
+      debugPrint(error.toString());
       _emailController.clear();
       _passwordController.clear();
     }

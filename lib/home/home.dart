@@ -1,9 +1,11 @@
-import 'package:dm_delights/core/repository.dart';
-import 'package:dm_delights/product/product_type.dart';
+import 'package:dm_delights/category/category_notifier.dart';
+import 'package:dm_delights/category/category.dart';
+import 'package:dm_delights/core/supabase.dart';
 import 'package:dm_delights/shared/custom/state.dart';
 import 'package:dm_delights/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,9 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends AuthRequiredState<HomePage> {
-  final Future<List<ProductType>> _productTypes =
-      ProductTypeRepository().fetch();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,68 +79,78 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                 ),
               ),
               onPressed: () {
-                debugPrint('');
+                Backend.instance.auth.signOut();
               },
             )
           ],
         ),
       ),
-      body: Padding(
-        padding: ThemeComponents.defaultPadding,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FutureBuilder<List<ProductType>>(
-                future: _productTypes,
-                builder: (_, snapshot) {
-                  if (snapshot.hasData) {
-                    debugPrint(snapshot.data!.length.toString());
-                    return Expanded(
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final type = snapshot.data![index];
+      body: Consumer<CategoryNotifier>(builder: (context, notifier, _) {
+        return Padding(
+          padding: ThemeComponents.defaultPadding,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FutureBuilder<List<Category>>(
+                  future: notifier.categories,
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      debugPrint(snapshot.data!.length.toString());
+                      return Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final type = snapshot.data![index];
 
-                          return Card(
-                            elevation: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Image.network(
-                                    type.avatar ?? '',
-                                    height: 128,
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                  SizedBox(
-                                    height: ThemeComponents.defaultSpacing,
-                                  ),
-                                  Text(type.name ?? '')
-                                ],
+                            return Card(
+                              elevation: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      type.avatar ?? '',
+                                      height: 128,
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                    SizedBox(
+                                      height: ThemeComponents.defaultSpacing,
+                                    ),
+                                    Text(type.name ?? '')
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text("ERROR");
-                  }
+                            );
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          Translations.of(context)!.feedback_error_generic,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }
 
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              )
-            ],
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                )
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

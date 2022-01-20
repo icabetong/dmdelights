@@ -13,7 +13,7 @@ class SignUpFragment extends StatefulWidget {
 class _SignUpFragmentState extends State<SignUpFragment> {
   bool _isLoading = false;
   bool _hasAccepted = false;
-  bool _showPassword = false;
+  bool _showPassword = true;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _repasswordController;
@@ -30,7 +30,7 @@ class _SignUpFragmentState extends State<SignUpFragment> {
 
     final error = response.error;
     if (error != null) {
-      print(error.toString());
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
       _emailController.clear();
       _passwordController.clear();
