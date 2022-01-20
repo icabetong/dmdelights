@@ -1,5 +1,7 @@
 import 'package:dm_delights/auth/auth.dart';
-import 'package:dm_delights/auth/state.dart';
+import 'package:dm_delights/cart/cart.dart';
+import 'package:dm_delights/home/home.dart';
+import 'package:dm_delights/shared/custom/state.dart';
 import 'package:dm_delights/core/supabase.dart';
 import 'package:dm_delights/localization/locales.dart';
 import 'package:dm_delights/shared/theme.dart';
@@ -34,7 +36,8 @@ class DMDelights extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (_) => const StartupPage(),
         '/auth': (_) => const AuthPage(),
-        '/app': (_) => const MainPage()
+        '/app': (_) => const HomePage(),
+        '/cart': (_) => const CartPage(),
       },
     );
   }
@@ -59,29 +62,6 @@ class _StartupPageState extends AuthState<StartupPage> {
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
-      ),
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends AuthRequiredState<MainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(Translations.of(context)!.app_name),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
-        ),
       ),
     );
   }

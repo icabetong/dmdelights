@@ -1,8 +1,10 @@
-import 'package:dm_delights/auth/state.dart';
+import 'package:dm_delights/shared/custom/state.dart';
 import 'package:dm_delights/core/supabase.dart';
 import 'package:dm_delights/shared/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInFragment extends StatefulWidget {
   const SignInFragment({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class SignInFragment extends StatefulWidget {
 
 class _SignInFragmentState extends AuthState<SignInFragment> {
   bool _isLoading = false;
+  bool _showPassword = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
@@ -27,6 +30,9 @@ class _SignInFragmentState extends AuthState<SignInFragment> {
     final response = await Backend.instance.auth.signIn(
       email: email,
       password: password,
+      options: AuthOptions(
+        redirectTo: kIsWeb ? null : 'io.capstone.dmdelights://login-callback/',
+      ),
     );
     final error = response.error;
     if (error != null) {
@@ -58,7 +64,7 @@ class _SignInFragmentState extends AuthState<SignInFragment> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+        padding: ThemeComponents.largePadding,
         child: Form(
           child: Column(
             children: [
@@ -74,8 +80,21 @@ class _SignInFragmentState extends AuthState<SignInFragment> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Translations.of(context)!.field_password,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      !_showPassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
                 ),
                 controller: _passwordController,
+                obscureText: _showPassword,
               ),
               SizedBox(height: ThemeComponents.defaultSpacing),
               TextButton(

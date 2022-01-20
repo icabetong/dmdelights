@@ -12,6 +12,8 @@ class SignUpFragment extends StatefulWidget {
 
 class _SignUpFragmentState extends State<SignUpFragment> {
   bool _isLoading = false;
+  bool _hasAccepted = false;
+  bool _showPassword = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _repasswordController;
@@ -28,7 +30,7 @@ class _SignUpFragmentState extends State<SignUpFragment> {
 
     final error = response.error;
     if (error != null) {
-      debugPrint(error.toString());
+      print(error.toString());
     } else {
       _emailController.clear();
       _passwordController.clear();
@@ -52,7 +54,7 @@ class _SignUpFragmentState extends State<SignUpFragment> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+        padding: ThemeComponents.largePadding,
         child: Form(
           child: Column(
             children: [
@@ -68,18 +70,66 @@ class _SignUpFragmentState extends State<SignUpFragment> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Translations.of(context)!.field_password,
+                  suffixIcon: IconButton(
+                    icon: Icon(_showPassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
                 ),
                 controller: _passwordController,
+                obscureText: _showPassword,
               ),
               SizedBox(height: ThemeComponents.largeSpacing),
               TextFormField(
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Translations.of(context)!.field_retype_password,
+                  suffixIcon: IconButton(
+                    icon: Icon(_showPassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
                 ),
                 controller: _repasswordController,
+                obscureText: _showPassword,
               ),
-              SizedBox(height: ThemeComponents.defaultSpacing),
+              SizedBox(height: ThemeComponents.smallSpacing),
+              CheckboxListTile(
+                dense: true,
+                title: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: Translations.of(context)!.field_accept_terms,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      TextSpan(
+                          text: Translations.of(context)!.terms_and_conditions,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColor,
+                          ))
+                    ],
+                  ),
+                ),
+                value: _hasAccepted,
+                onChanged: (checked) {
+                  setState(() => _hasAccepted = checked ?? false);
+                },
+              ),
+              SizedBox(height: ThemeComponents.mediumSpacing),
               SizedBox(
                 width: double.infinity,
                 height: 48,
