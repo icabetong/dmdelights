@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "314946564621",
+    "project_id": "dmdelights-clsu",
+    "storage_bucket": "dmdelights-clsu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314946564621:android:0bc5ebca99da1051781b44",
+        "android_client_info": {
+          "package_name": "io.capstone.dmdelights"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314946564621-6g1ee46ln9pkm9v645dht5f0gfq4bhn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKV_nLT7UhnY5x4VhwHPSK54iYzaIivXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314946564621-6g1ee46ln9pkm9v645dht5f0gfq4bhn3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

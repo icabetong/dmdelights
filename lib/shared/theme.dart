@@ -12,7 +12,7 @@ class ThemeComponents {
 }
 
 ThemeData get light {
-  const font = 'Raleway';
+  const font = 'Poppins';
   const branding600 = Color(0xffdb2777);
   const branding400 = Color(0xfff472b6);
   const text800 = Color(0xff334155);

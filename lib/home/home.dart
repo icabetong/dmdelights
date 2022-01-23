@@ -1,7 +1,6 @@
 import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/category/category.dart';
-import 'package:dm_delights/core/supabase.dart';
-import 'package:dm_delights/shared/custom/state.dart';
+import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -14,7 +13,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends AuthRequiredState<HomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +23,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
             onPressed: () {
-              Navigator.pushNamed(context, '/cart');
+              Navigator.pushNamed(context, 'cart');
             },
           )
         ],
@@ -78,8 +77,15 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                   ],
                 ),
               ),
-              onPressed: () {
-                Backend.instance.auth.signOut();
+              onPressed: () async {
+                await Infrastructure.auth.signOut();
+                if (Infrastructure.auth.currentUser == null) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    'auth',
+                    (route) => false,
+                  );
+                }
               },
             )
           ],

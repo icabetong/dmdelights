@@ -1,4 +1,4 @@
-import 'package:dm_delights/core/supabase.dart';
+import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -26,10 +26,12 @@ class _SignUpFragmentState extends State<SignUpFragment> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final response = await Backend.instance.auth.signUp(email, password);
+    final credential = await Infrastructure.auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-    final error = response.error;
-    if (error != null) {
+    if (credential.user != null) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
       _emailController.clear();

@@ -1,10 +1,8 @@
-import 'package:dm_delights/shared/custom/state.dart';
-import 'package:dm_delights/core/supabase.dart';
+import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/shared/theme.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInFragment extends StatefulWidget {
   const SignInFragment({Key? key}) : super(key: key);
@@ -13,7 +11,7 @@ class SignInFragment extends StatefulWidget {
   _SignInFragmentState createState() => _SignInFragmentState();
 }
 
-class _SignInFragmentState extends AuthState<SignInFragment> {
+class _SignInFragmentState extends State<SignInFragment> {
   bool _isLoading = false;
   bool _showPassword = true;
   late final TextEditingController _emailController;
@@ -27,18 +25,13 @@ class _SignInFragmentState extends AuthState<SignInFragment> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final response = await Backend.instance.auth.signIn(
+    final credential = await Infrastructure.auth.signInWithEmailAndPassword(
       email: email,
       password: password,
-      options: AuthOptions(
-        redirectTo: kIsWeb ? null : 'io.capstone.dmdelights://login-callback/',
-      ),
     );
-    final error = response.error;
-    if (error != null) {
+    if (credential.additionalUserInfo != null) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
-      debugPrint(error.toString());
       _emailController.clear();
       _passwordController.clear();
     }
