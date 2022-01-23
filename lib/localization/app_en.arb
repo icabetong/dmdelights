@@ -2,6 +2,7 @@
     "app_name": "DM Delights",
     "route_profile": "Profile",
     "route_orders": "Orders",
+    "route_carts": "Cart",
     "route_store_profile": "Store Profile",
     "route_privacy_policy": "Privacy Policy",
     "field_email": "Email",
@@ -13,24 +14,55 @@
     "field_address": "Address",
     "field_quantity": "Quantity",
     "field_price": "Price",
+    "field_delivery": "Delivery",
+    "field_pick_up": "Pick-up",
+    "field_total": "Total Price",
+    "field_phone": "Phone Number",
+    "field_house_block_room_no": "House no./Block no./Room no.",
+    "field_street": "Street",
+    "field_village": "Village",
+    "field_city": "City",
+    "field_province": "Province",
+    "field_zipcode": "Zip Code", 
     "select_variant": "Select Variant",
     "price_starts_at": "Price starts at {price}",
     "@price_starts_at": {
       "description": "Interpolate the price value to the localization",
       "placeholders": {
         "price": {
-          "type": "int",
+          "type": "String",
           "example": "9.00"
+        }
+      }
+    },
+    "order_quantity": "Quantity: {count}",
+    "@order_quantity": {
+      "description": "Interpolate the order quantity",
+      "placeholders": {
+        "count": {
+          "type": "int",
+          "example": "2"
         }
       }
     },
     "button_signin": "Login",
     "button_signup": "Register",
     "button_signout": "Logout",
+    "button_cancel": "Cancel",
+    "button_continue": "Continue",
     "button_forgot_password": "Forgot Password",
     "button_add_to_cart": "Add to Cart",
+    "button_proceed_to_checkout": "Proceed to Checkout",
+    "button_save": "Save",
     "feedback_authenticating": "Authenticating",
+    "feedback_profile_updated": "Profile Updated",
+    "feedback_address_updated": "Address Updated",
     "feedback_error_generic": "An Error Occured",
+    "dialog_signout_title": "Log-out?",
+    "tab_info": "Info",
+    "tab_address": "Address",
+    "tab_security": "Security",
+    "dialog_signout_message": "Are you sure you want to logout your account? You'll need to enter your email and password next time.",
     "terms_and_conditions": "Terms and Conditions",
     "privacy_policy": "Privacy Policy"
 }

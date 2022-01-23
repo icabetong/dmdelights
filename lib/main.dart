@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:dm_delights/auth/auth.dart';
-import 'package:dm_delights/cart/cart.dart';
+import 'package:dm_delights/cart/cart_notifier.dart';
+import 'package:dm_delights/cart/cart_page.dart';
 import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/home/home.dart';
 import 'package:dm_delights/localization/locales.dart';
 import 'package:dm_delights/product/product_notifier.dart';
+import 'package:dm_delights/profile/profile_notifier.dart';
 import 'package:dm_delights/shared/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +60,12 @@ class _DMDelightsState extends State<DMDelights> {
         ),
         ChangeNotifierProvider<ProductNotifier>(
           create: (_) => ProductNotifier(),
+        ),
+        ChangeNotifierProvider<CartNotifier>(
+          create: (_) => CartNotifier(),
+        ),
+        ChangeNotifierProvider<ProfileNotifier>(
+          create: (_) => ProfileNotifier(),
         )
       ],
       child: MaterialApp(

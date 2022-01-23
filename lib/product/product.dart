@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Product {
   String id;
   String name;
@@ -42,9 +44,21 @@ class Variant {
 
   Variant(this.name, this.price, this.stock);
 
+  static String format(num price) {
+    return NumberFormat.compactCurrency(locale: 'tl').format(price);
+  }
+
   static Variant getLowestPrice(List<Variant> variants) {
     return variants
         .reduce((curr, next) => curr.price > next.price ? curr : next);
+  }
+
+  static Map<String, dynamic> toMap(Variant variant) {
+    return <String, dynamic>{
+      'name': variant.name,
+      'price': variant.price,
+      'stock': variant.stock,
+    };
   }
 
   static Variant fromMap(Map<String, dynamic> doc) {

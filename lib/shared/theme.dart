@@ -44,5 +44,8 @@ ThemeData get light {
       unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
     ),
     drawerTheme: base.drawerTheme.copyWith(backgroundColor: branding400),
+    snackBarTheme: base.snackBarTheme.copyWith(
+      behavior: SnackBarBehavior.floating,
+    ),
   );
 }

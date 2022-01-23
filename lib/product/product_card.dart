@@ -23,12 +23,15 @@ class ProductCard extends StatelessWidget {
           children: [
             product.imageUrl == null && category.imageUrl == null
                 ? const SizedBox(width: 128, height: 128)
-                : Image.network(
-                    product.imageUrl == null
-                        ? category.imageUrl!
-                        : product.imageUrl!,
-                    width: 128,
-                    height: 128,
+                : Hero(
+                    tag: product.id,
+                    child: Image.network(
+                      product.imageUrl == null
+                          ? category.imageUrl!
+                          : product.imageUrl!,
+                      width: 128,
+                      height: 128,
+                    ),
                   ),
             Text(
               product.name,
@@ -37,7 +40,9 @@ class ProductCard extends StatelessWidget {
             if (product.variants.isNotEmpty)
               Text(
                 Translations.of(context)!.price_starts_at(
-                  Variant.getLowestPrice(product.variants).price.toInt(),
+                  Variant.format(
+                    Variant.getLowestPrice(product.variants).price,
+                  ),
                 ),
                 style: const TextStyle(color: Colors.grey),
               ),

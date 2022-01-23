@@ -34,6 +34,14 @@ class _CategoryPageState extends State<CategoryPage> {
             isScrollable: true,
             tabs: subcategories.map((s) => Tab(text: s)).toList(),
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.shopping_cart_outlined),
+              onPressed: () {
+                Navigator.pushNamed(context, 'cart');
+              },
+            )
+          ],
         ),
         body: Consumer<ProductNotifier>(builder: (context, notifier, _) {
           return FutureBuilder<List<Product>>(

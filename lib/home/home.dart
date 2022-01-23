@@ -1,7 +1,12 @@
+import 'package:dm_delights/about/privacy_policy.dart';
+import 'package:dm_delights/about/store.dart';
+import 'package:dm_delights/cart/cart_page.dart';
 import 'package:dm_delights/category/category_grid.dart';
 import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/category/category.dart';
 import 'package:dm_delights/core/infrastructure.dart';
+import 'package:dm_delights/orders/orders_page.dart';
+import 'package:dm_delights/profile/profile_page.dart';
 import 'package:dm_delights/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -15,6 +20,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<bool?> _onConfirmEndSession() async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(Translations.of(context)!.dialog_signout_title),
+          content: Text(Translations.of(context)!.dialog_signout_message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(Translations.of(context)!.button_continue),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+            TextButton(
+              child: Text(Translations.of(context)!.button_cancel),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _onNavigate(Route route) {
+    switch (route) {
+      case Route.profile:
+        return const ProfilePage();
+      case Route.orders:
+        return const OrdersPage();
+      case Route.store:
+        return const StoreProfilePage();
+      case Route.policies:
+        return const PrivacyPolicyPage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +95,14 @@ class _HomePageState extends State<HomePage> {
                     route.icon,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => _onNavigate(route),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -79,13 +131,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onPressed: () async {
-                await Infrastructure.auth.signOut();
-                if (Infrastructure.auth.currentUser == null) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    'auth',
-                    (route) => false,
-                  );
+                final response = await _onConfirmEndSession();
+                if (response == true) {
+                  await Infrastructure.auth.signOut();
+                  if (Infrastructure.auth.currentUser == null) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      'auth',
+                      (route) => false,
+                    );
+                  }
                 }
               },
             )
