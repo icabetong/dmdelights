@@ -45,14 +45,19 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: subcategories
                       .map((s) => CategoryTab(
                             key: UniqueKey(),
-                            subcategory: s,
-                            products:
-                                data.where((d) => d.isCorrectType(s)).toList(),
+                            category: widget.category,
+                            products: data.where((d) {
+                              return d.isCorrectType(s);
+                            }).toList(),
                           ))
                       .toList(),
                 );
               } else if (snapshot.hasError) {
-                return Text(Translations.of(context)!.feedback_error_generic);
+                return Center(
+                  child: Text(
+                    Translations.of(context)!.feedback_error_generic,
+                  ),
+                );
               }
 
               return const Center(

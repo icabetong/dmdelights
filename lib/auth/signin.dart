@@ -1,6 +1,5 @@
 import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/shared/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 

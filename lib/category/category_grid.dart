@@ -30,21 +30,54 @@ class CategoryGrid extends StatelessWidget {
             },
             child: Card(
               elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Image.network(
-                      category.imageUrl ?? '',
-                      height: 128,
-                      fit: BoxFit.scaleDown,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                //set border radius more than 50% of height and width to make circle
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: category.imageUrl != null
+                        ? BoxDecoration(
+                            color: Colors.transparent,
+                            image: DecorationImage(
+                              image: NetworkImage(category.imageUrl!),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : null,
+                  ),
+                  Container(
+                    child: Center(
+                      child: Text(
+                        category.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 8.0,
+                              color: Colors.black54,
+                              offset: Offset(2.0, 2.0),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    SizedBox(
-                      height: ThemeComponents.defaultSpacing,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: const Alignment(1.0, -1),
+                        end: const Alignment(-1.0, 1),
+                        colors: [
+                          Colors.pink.shade400.withOpacity(0.4),
+                          Colors.pink.shade600.withOpacity(0.2)
+                        ],
+                      ),
                     ),
-                    Text(category.name)
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           );

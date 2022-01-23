@@ -1,13 +1,13 @@
+import 'package:dm_delights/category/category.dart';
 import 'package:dm_delights/product/product.dart';
 import 'package:dm_delights/product/product_card.dart';
 import 'package:flutter/material.dart';
 
 class CategoryTab extends StatefulWidget {
-  const CategoryTab(
-      {Key? key, required this.subcategory, required this.products})
+  const CategoryTab({Key? key, required this.category, required this.products})
       : super(key: key);
 
-  final String subcategory;
+  final Category category;
   final List<Product> products;
 
   @override
@@ -25,6 +25,7 @@ class _CategoryTabState extends State<CategoryTab> {
         final product = widget.products[index];
         return ProductCard(
           product: product,
+          category: widget.category,
         );
       },
     );

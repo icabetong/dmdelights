@@ -11,10 +11,24 @@
     "field_lastname": "Last Name",
     "field_firstname": "First Name",
     "field_address": "Address",
+    "field_quantity": "Quantity",
+    "field_price": "Price",
+    "select_variant": "Select Variant",
+    "price_starts_at": "Price starts at {price}",
+    "@price_starts_at": {
+      "description": "Interpolate the price value to the localization",
+      "placeholders": {
+        "price": {
+          "type": "int",
+          "example": "9.00"
+        }
+      }
+    },
     "button_signin": "Login",
     "button_signup": "Register",
     "button_signout": "Logout",
     "button_forgot_password": "Forgot Password",
+    "button_add_to_cart": "Add to Cart",
     "feedback_authenticating": "Authenticating",
     "feedback_error_generic": "An Error Occured",
     "terms_and_conditions": "Terms and Conditions",

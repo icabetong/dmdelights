@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dm_delights/auth/auth.dart';
 import 'package:dm_delights/cart/cart.dart';
 import 'package:dm_delights/category/category_notifier.dart';
-import 'package:dm_delights/category/category_page.dart';
 import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/home/home.dart';
 import 'package:dm_delights/localization/locales.dart';
