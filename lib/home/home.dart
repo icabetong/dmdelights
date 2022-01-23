@@ -1,3 +1,4 @@
+import 'package:dm_delights/category/category_grid.dart';
 import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/category/category.dart';
 import 'package:dm_delights/core/infrastructure.dart';
@@ -92,68 +93,31 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Consumer<CategoryNotifier>(builder: (context, notifier, _) {
-        return Padding(
-          padding: ThemeComponents.defaultPadding,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FutureBuilder<List<Category>>(
-                  future: notifier.categories,
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      debugPrint(snapshot.data!.length.toString());
-                      return Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final type = snapshot.data![index];
+        return RefreshIndicator(
+          onRefresh: () async {
+            await notifier.refresh();
+          },
+          child: FutureBuilder<List<Category>>(
+            future: notifier.categories,
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                return CategoryGrid(categories: snapshot.data!);
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    Translations.of(context)!.feedback_error_generic,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                );
+              }
 
-                            return Card(
-                              elevation: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      type.avatar ?? '',
-                                      height: 128,
-                                      fit: BoxFit.scaleDown,
-                                    ),
-                                    SizedBox(
-                                      height: ThemeComponents.defaultSpacing,
-                                    ),
-                                    Text(type.name ?? '')
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          Translations.of(context)!.feedback_error_generic,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      );
-                    }
-
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                )
-              ],
-            ),
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
         );
       }),
