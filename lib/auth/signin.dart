@@ -29,7 +29,7 @@ class _SignInFragmentState extends State<SignInFragment> {
       password: password,
     );
     if (credential.additionalUserInfo != null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
     } else {
       _emailController.clear();
       _passwordController.clear();

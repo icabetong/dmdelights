@@ -32,7 +32,7 @@ class _SignUpFragmentState extends State<SignUpFragment> {
     );
 
     if (credential.user != null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
     } else {
       _emailController.clear();
       _passwordController.clear();
