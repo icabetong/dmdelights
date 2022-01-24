@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animations/animations.dart';
 import 'package:dm_delights/auth/auth.dart';
 import 'package:dm_delights/cart/cart_notifier.dart';
 import 'package:dm_delights/cart/cart_page.dart';
@@ -90,8 +91,20 @@ class _DMDelightsState extends State<DMDelights> {
               return MaterialPageRoute(
                   settings: settings, builder: (_) => const HomePage());
             case 'cart':
-              return MaterialPageRoute(
-                  settings: settings, builder: (_) => const CartPage());
+              return PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return const CartPage();
+                },
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SharedAxisTransition(
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                    transitionType: SharedAxisTransitionType.horizontal,
+                  );
+                },
+              );
             default:
               return MaterialPageRoute(
                   settings: settings, builder: (_) => const StartPage());

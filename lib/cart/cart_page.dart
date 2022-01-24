@@ -70,14 +70,59 @@ class _CartPageState extends State<CartPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                child:
-                    Text(Translations.of(context)!.button_proceed_to_checkout),
+                child: Text(
+                  Translations.of(context)!.button_proceed_to_checkout,
+                ),
                 onPressed: () {},
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _onAction(CartItem item, CartAction action) async {
+    switch (action) {
+      case CartAction.edit:
+        break;
+      case CartAction.remove:
+        await _onRemove(item);
+        break;
+    }
+  }
+
+  Future<void> _onEdit() async {}
+  Future<void> _onRemove(CartItem item) async {
+    final response = await _showRemovePrompt(item);
+    if (response == true) {}
+  }
+
+  Future<bool?> _showRemovePrompt(CartItem item) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            Translations.of(context)!.dialog_remove_cart_item(item.name),
+          ),
+          content: Text(Translations.of(context)!.dialog_signout_message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(Translations.of(context)!.button_remove),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+            TextButton(
+              child: Text(Translations.of(context)!.button_cancel),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -90,33 +135,37 @@ class _CartPageState extends State<CartPage> {
       body: Consumer<CartNotifier>(
         builder: (context, notifier, _) {
           return FutureBuilder<List<CartItem>>(
-              future: notifier.cartItems,
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      await notifier.reset();
-                    },
-                    child: Column(
-                      children: [
-                        CartList(cartItems: snapshot.data!),
-                        const Spacer(flex: 2),
-                        getBottom(snapshot.data!),
-                      ],
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      Translations.of(context)!.feedback_error_generic,
-                    ),
-                  );
-                }
-
-                return const Center(
-                  child: CircularProgressIndicator(),
+            future: notifier.cartItems,
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await notifier.reset();
+                  },
+                  child: Column(
+                    children: [
+                      CartList(
+                        cartItems: snapshot.data!,
+                        onAction: _onAction,
+                      ),
+                      const Spacer(flex: 2),
+                      getBottom(snapshot.data!),
+                    ],
+                  ),
                 );
-              });
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    Translations.of(context)!.feedback_error_generic,
+                  ),
+                );
+              }
+
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          );
         },
       ),
     );

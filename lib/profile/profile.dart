@@ -71,7 +71,7 @@ class Address {
       village: doc['village'],
       city: doc['city'],
       province: doc['province'],
-      zipcode: int.parse(doc['zipcode']),
+      zipcode: doc['zipcode'],
     );
   }
 }

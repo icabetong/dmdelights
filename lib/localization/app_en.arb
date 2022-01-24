@@ -54,6 +54,8 @@
     "button_add_to_cart": "Add to Cart",
     "button_proceed_to_checkout": "Proceed to Checkout",
     "button_save": "Save",
+    "button_edit": "Edit",
+    "button_remove": "Remove",
     "feedback_authenticating": "Authenticating",
     "feedback_profile_updated": "Profile Updated",
     "feedback_address_updated": "Address Updated",
@@ -63,6 +65,17 @@
     "tab_address": "Address",
     "tab_security": "Security",
     "dialog_signout_message": "Are you sure you want to logout your account? You'll need to enter your email and password next time.",
+    "dialog_remove_cart_item": "Remove {item}?",
+    "@dialog_remove_cart_item": {
+      "description": "Interpolate the item name",
+      "placeholders": {
+        "item": {
+          "type": "String",
+          "example": "Classic Frape"
+        }
+      }
+    },
+    "dialog_remove_cart_item_message": "This action cannot be undone.",
     "terms_and_conditions": "Terms and Conditions",
     "privacy_policy": "Privacy Policy"
 }
