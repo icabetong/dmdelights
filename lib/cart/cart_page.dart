@@ -1,3 +1,5 @@
+import 'package:animations/animations.dart';
+import 'package:dm_delights/auth/signup.dart';
 import 'package:dm_delights/cart/cart_item.dart';
 import 'package:dm_delights/cart/cart_list.dart';
 import 'package:dm_delights/cart/cart_notifier.dart';
@@ -6,7 +8,6 @@ import 'package:dm_delights/orders/order.dart';
 import 'package:dm_delights/orders/order_notifier.dart';
 import 'package:dm_delights/product/product_page.dart';
 import 'package:dm_delights/shared/custom/status.dart';
-import 'package:dm_delights/shared/theme.dart';
 import 'package:dm_delights/shared/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -98,7 +99,27 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _onCheckout(List<CartItem> cartItems) async {
-    final userId = Infrastructure.auth.currentUser?.uid;
+    final user = Infrastructure.auth.currentUser;
+    final userId = user?.uid;
+
+    if (user?.isAnonymous == true) {
+      await Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return const SignUpPage();
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      );
+    }
 
     if (userId != null) {
       final order = Order(

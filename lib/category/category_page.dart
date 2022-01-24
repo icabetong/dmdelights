@@ -50,7 +50,7 @@ class _CategoryPageState extends State<CategoryPage> {
             builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final data = snapshot.data ?? [];
-                return data.isEmpty
+                return data.isNotEmpty
                     ? TabBarView(
                         children: subcategories
                             .map((s) => CategoryTab(
