@@ -5,6 +5,8 @@ import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/orders/order.dart';
 import 'package:dm_delights/orders/order_notifier.dart';
 import 'package:dm_delights/product/product_page.dart';
+import 'package:dm_delights/shared/custom/status.dart';
+import 'package:dm_delights/shared/theme.dart';
 import 'package:dm_delights/shared/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -39,16 +41,20 @@ class _CartPageState extends State<CartPage> {
                 ChoiceChip(
                   label: Text(Translations.of(context)!.field_delivery),
                   selected: isDelivery,
-                  onSelected: (_) {
-                    setState(() => isDelivery = true);
-                  },
+                  onSelected: cartItems.isEmpty
+                      ? null
+                      : (_) {
+                          setState(() => isDelivery = true);
+                        },
                 ),
                 ChoiceChip(
                   label: Text(Translations.of(context)!.field_pick_up),
                   selected: !isDelivery,
-                  onSelected: (_) {
-                    setState(() => isDelivery = false);
-                  },
+                  onSelected: cartItems.isEmpty
+                      ? null
+                      : (_) {
+                          setState(() => isDelivery = false);
+                        },
                 ),
               ],
             ),
@@ -78,9 +84,11 @@ class _CartPageState extends State<CartPage> {
                 child: Text(
                   Translations.of(context)!.button_proceed_to_checkout,
                 ),
-                onPressed: cartItems.isEmpty ? null : () {
-                  _onCheckout(cartItems);
-                },
+                onPressed: cartItems.isEmpty
+                    ? null
+                    : () {
+                        _onCheckout(cartItems);
+                      },
               ),
             ),
           ],
@@ -192,12 +200,22 @@ class _CartPageState extends State<CartPage> {
                   },
                   child: Column(
                     children: [
-                      CartList(
-                        cartItems: snapshot.data!,
-                        onSelect: _onSelect,
-                        onAction: _onAction,
-                      ),
-                      const Spacer(flex: 2),
+                      snapshot.data!.isEmpty
+                          ? Expanded(
+                              flex: 2,
+                              child: Status(
+                                icon: Icons.add_shopping_cart_outlined,
+                                title: Translations.of(context)!.empty_cart,
+                              ),
+                            )
+                          : Expanded(
+                              flex: 1,
+                              child: CartList(
+                                cartItems: snapshot.data!,
+                                onSelect: _onSelect,
+                                onAction: _onAction,
+                              ),
+                            ),
                       getBottom(snapshot.data!),
                     ],
                   ),

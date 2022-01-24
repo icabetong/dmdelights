@@ -99,6 +99,8 @@
         }
       }
     },
+    "empty_cart": "You have an empty cart",
+    "empty_products": "This section doesn't have products",
     "terms_and_conditions": "Terms and Conditions",
     "privacy_policy": "Privacy Policy"
 }

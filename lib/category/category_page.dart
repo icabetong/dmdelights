@@ -3,6 +3,7 @@ import 'package:dm_delights/category/category_tab.dart';
 import 'package:dm_delights/product/product.dart';
 import 'package:dm_delights/product/product_notifier.dart';
 import 'package:dm_delights/shared/custom/indicator.dart';
+import 'package:dm_delights/shared/custom/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:provider/provider.dart';
@@ -49,17 +50,24 @@ class _CategoryPageState extends State<CategoryPage> {
             builder: (_, snapshot) {
               if (snapshot.hasData) {
                 final data = snapshot.data ?? [];
-                return TabBarView(
-                  children: subcategories
-                      .map((s) => CategoryTab(
-                            key: UniqueKey(),
-                            category: widget.category,
-                            products: data.where((d) {
-                              return d.isCorrectType(s);
-                            }).toList(),
-                          ))
-                      .toList(),
-                );
+                return data.isEmpty
+                    ? TabBarView(
+                        children: subcategories
+                            .map((s) => CategoryTab(
+                                  key: UniqueKey(),
+                                  category: widget.category,
+                                  products: data.where((d) {
+                                    return d.isCorrectType(s);
+                                  }).toList(),
+                                ))
+                            .toList(),
+                      )
+                    : Center(
+                        child: Status(
+                          icon: Icons.shopping_bag_outlined,
+                          title: Translations.of(context)!.empty_products,
+                        ),
+                      );
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text(
