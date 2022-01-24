@@ -1,6 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:dm_delights/about/privacy_policy.dart';
 import 'package:dm_delights/about/store.dart';
-import 'package:dm_delights/cart/cart_page.dart';
+import 'package:dm_delights/auth/signup.dart';
 import 'package:dm_delights/category/category_grid.dart';
 import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/category/category.dart';
@@ -83,27 +84,57 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 final route = Route.values[index];
 
-                return ListTile(
-                  title: Text(
-                    route.getLocalization(context),
-                    style: TextStyle(
-                      fontSize: 18,
+                if (Infrastructure.auth.currentUser?.isAnonymous == true &&
+                    route == Route.profile) {
+                  return ListTile(
+                    title: Text(
+                      Translations.of(context)!.button_signup,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(pageBuilder:
+                            (context, animation, secondaryAnimation) {
+                          return const SignUpPage();
+                        }, transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return SharedAxisTransition(
+                            child: child,
+                            animation: animation,
+                            secondaryAnimation: secondaryAnimation,
+                            transitionType: SharedAxisTransitionType.horizontal,
+                          );
+                        }),
+                      );
+                    },
+                  );
+                } else {
+                  return ListTile(
+                    title: Text(
+                      route.getLocalization(context),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                    leading: Icon(
+                      route.icon,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                  ),
-                  leading: Icon(
-                    route.icon,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => _onNavigate(route),
-                      ),
-                    );
-                  },
-                );
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => _onNavigate(route),
+                        ),
+                      );
+                    },
+                  );
+                }
               },
             ),
             const Spacer(flex: 1),

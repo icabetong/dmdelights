@@ -16,6 +16,18 @@ class _SignInFragmentState extends State<SignInFragment> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
+  Future<void> _signInAnonymously() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final creds = await Infrastructure.auth.signInAnonymously();
+    if (creds.additionalUserInfo != null) {
+      Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+    }
+    setState(() => _isLoading = false);
+  }
+
   Future<void> _signIn() async {
     setState(() {
       _isLoading = true;
@@ -109,6 +121,15 @@ class _SignInFragmentState extends State<SignInFragment> {
                   ),
                   onPressed: _isLoading ? null : _signIn,
                 ),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                child: Text(
+                  _isLoading
+                      ? Translations.of(context)!.feedback_authenticating
+                      : Translations.of(context)!.button_signin_anonymous,
+                ),
+                onPressed: _isLoading ? null : _signInAnonymously,
               )
             ],
           ),

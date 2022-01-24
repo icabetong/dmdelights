@@ -154,14 +154,10 @@ class OrderRepository extends Repository<Order> {
   Future<void> insert(Order order) async {
     final userId = auth.currentUser?.uid;
     if (userId != null) {
-      final batch = firestore.batch();
-      for (CartItem item in order.cartItems) {
-        batch.update(firestore.collection(_products).doc(item.id), {
-          'variants': {'0': FieldValue.increment(item.quantity)}
-        });
-      }
-      batch.set(firestore.collection(_name).doc(order.id), Order.toMap(order));
-      batch.commit();
+      return await firestore
+          .collection(_name)
+          .doc(order.id)
+          .set(Order.toMap(order));
     }
     return;
   }

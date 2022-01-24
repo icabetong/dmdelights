@@ -6,7 +6,7 @@ class Product {
   String category;
   String? type;
   String? imageUrl;
-  Map<String, Variant> variants;
+  List<Variant> variants;
 
   Product({
     required this.id,
@@ -14,7 +14,7 @@ class Product {
     required this.category,
     this.type,
     this.imageUrl,
-    this.variants = const {},
+    this.variants = const [],
   });
 
   bool isCorrectType(String type) {
@@ -22,11 +22,9 @@ class Product {
   }
 
   static Product fromMap(Map<String, dynamic> doc) {
-    Map<String, dynamic>? _variants = doc['variants'] == null
-        ? {}
-        : Map<String, dynamic>.from(doc['variants']);
-    Map<String, Variant> variants = Map.fromIterables(
-        _variants.keys, _variants.values.map((v) => Variant.fromMap(v)));
+    Iterable? _variants = doc['variants'];
+    List<Map<String, dynamic>> variants =
+        _variants?.map((v) => Map<String, dynamic>.from(v)).toList() ?? [];
 
     return Product(
       id: doc['id'],
@@ -34,7 +32,7 @@ class Product {
       category: doc['category'],
       type: doc['type'],
       imageUrl: doc['imageUrl'],
-      variants: variants,
+      variants: variants.map((v) => Variant.fromMap(v)).toList(),
     );
   }
 }
@@ -42,9 +40,9 @@ class Product {
 class Variant {
   String name;
   num price;
-  num stock;
+  bool available;
 
-  Variant(this.name, this.price, this.stock);
+  Variant(this.name, this.price, this.available);
 
   static String format(num price) {
     return NumberFormat.compactCurrency(locale: 'tl').format(price);
@@ -59,11 +57,11 @@ class Variant {
     return <String, dynamic>{
       'name': variant.name,
       'price': variant.price,
-      'stock': variant.stock,
+      'available': variant.available,
     };
   }
 
   static Variant fromMap(Map<String, dynamic> doc) {
-    return Variant(doc['name'], doc['price'], doc['stock']);
+    return Variant(doc['name'], doc['price'], doc['available']);
   }
 }

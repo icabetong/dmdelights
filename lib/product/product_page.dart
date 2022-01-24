@@ -82,9 +82,9 @@ class _ProductPageState extends State<ProductPage> {
                     Text(
                       _variant == null
                           ? Translations.of(context)!.price_starts_at(
-                              Variant.format(Variant.getLowestPrice(
-                                      product.variants.values.toList())
-                                  .price))
+                              Variant.format(
+                                  Variant.getLowestPrice(product.variants)
+                                      .price))
                           : Variant.format(_variant!.price),
                       style: const TextStyle(fontSize: 16),
                     ),
@@ -96,7 +96,7 @@ class _ProductPageState extends State<ProductPage> {
                   style: const TextStyle(color: Colors.grey),
                 ),
                 Wrap(
-                  children: product.variants.values
+                  children: product.variants
                       .map((v) => ChoiceChip(
                             label: Text(v.name),
                             selected: _variant == v,
@@ -115,7 +115,7 @@ class _ProductPageState extends State<ProductPage> {
                       NumericStepper(
                         value: _quantity,
                         min: 0,
-                        max: _variant!.stock.toInt(),
+                        max: 10,
                         onChanged: (value) {
                           setState(() => _quantity = value);
                         },
@@ -125,7 +125,7 @@ class _ProductPageState extends State<ProductPage> {
                         width: double.infinity,
                         height: 48,
                         child: ElevatedButton.icon(
-                          onPressed: _quantity <= _variant!.stock
+                          onPressed: _variant!.available
                               ? () {
                                   _onAddToCart(product);
                                 }

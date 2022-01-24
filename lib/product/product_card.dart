@@ -41,8 +41,7 @@ class ProductCard extends StatelessWidget {
               Text(
                 Translations.of(context)!.price_starts_at(
                   Variant.format(
-                    Variant.getLowestPrice(product.variants.values.toList())
-                        .price,
+                    Variant.getLowestPrice(product.variants).price,
                   ),
                 ),
                 style: const TextStyle(color: Colors.grey),

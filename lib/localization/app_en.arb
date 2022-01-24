@@ -56,6 +56,7 @@
     "button_save": "Save",
     "button_edit": "Edit",
     "button_remove": "Remove",
+    "button_signin_anonymous": "I'll create an account later",
     "feedback_authenticating": "Authenticating",
     "feedback_profile_updated": "Profile Updated",
     "feedback_address_updated": "Address Updated",
