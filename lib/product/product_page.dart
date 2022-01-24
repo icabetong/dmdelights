@@ -40,7 +40,7 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  void _onAddToCart(Product product) {
+  void _onAddToCart(Product product) async {
     CartItem cartItem = CartItem(
       id: product.id,
       name: product.name,
@@ -48,7 +48,10 @@ class _ProductPageState extends State<ProductPage> {
       quantity: _quantity,
     );
 
-    Provider.of<CartNotifier>(context, listen: false).insert(cartItem);
+    await Provider.of<CartNotifier>(context, listen: false).insert(cartItem);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(Translations.of(context)!.feedback_added_to_cart),
+    ));
   }
 
   Widget getPage(Product product) {

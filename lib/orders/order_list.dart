@@ -25,6 +25,6 @@ class OrderListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(title: Text(order.id));
+    return ListTile(title: Text(order.cartItems[0].name));
   }
 }

@@ -50,8 +50,8 @@ class CartListItem extends StatelessWidget {
           : const SizedBox(width: 24, height: 24),
       title: Text(cartItem.name,
           style: const TextStyle(fontWeight: FontWeight.w500)),
-      subtitle:
-          Text(Translations.of(context)!.order_quantity(cartItem.quantity)),
+      subtitle: Text(Translations.of(context)!
+          .order_quantity_and_variant(cartItem.name, cartItem.quantity)),
       trailing: PopupMenuButton<CartAction>(
         onSelected: (CartAction action) {
           onAction(cartItem, action);

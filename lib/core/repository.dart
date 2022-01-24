@@ -131,7 +131,9 @@ class CartRepository extends Repository<CartItem> {
 }
 
 class OrderRepository extends Repository<Order> {
-  static const _name = "orders";
+  static const _orders = "orders";
+  static const _users = "users";
+  static const _cart = "cart";
   final auth = Infrastructure.auth;
   final firestore = Infrastructure.firestore;
 
@@ -140,7 +142,7 @@ class OrderRepository extends Repository<Order> {
     final userId = auth.currentUser?.uid;
     if (userId != null) {
       final result = await firestore
-          .collection(_name)
+          .collection(_orders)
           .where('ownerId', isEqualTo: userId)
           .get();
 
@@ -153,10 +155,22 @@ class OrderRepository extends Repository<Order> {
   Future<void> insert(Order order) async {
     final userId = auth.currentUser?.uid;
     if (userId != null) {
-      return await firestore
-          .collection(_name)
-          .doc(order.id)
-          .set(Order.toMap(order));
+      final batch = firestore.batch();
+      batch.set(
+        firestore.collection(_orders).doc(order.id),
+        Order.toMap(order),
+      );
+
+      final items = await firestore
+          .collection(_users)
+          .doc(userId)
+          .collection(_cart)
+          .get();
+      for (QueryDocumentSnapshot snapshot in items.docs) {
+        batch.delete(snapshot.reference);
+      }
+
+      return await batch.commit();
     }
     return;
   }

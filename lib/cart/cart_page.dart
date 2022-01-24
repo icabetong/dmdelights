@@ -6,8 +6,12 @@ import 'package:dm_delights/cart/cart_notifier.dart';
 import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/orders/order.dart';
 import 'package:dm_delights/orders/order_notifier.dart';
+import 'package:dm_delights/product/product.dart';
+import 'package:dm_delights/product/product_notifier.dart';
 import 'package:dm_delights/product/product_page.dart';
+import 'package:dm_delights/shared/custom/numeric.dart';
 import 'package:dm_delights/shared/custom/status.dart';
+import 'package:dm_delights/shared/theme.dart';
 import 'package:dm_delights/shared/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -25,6 +29,96 @@ class _CartPageState extends State<CartPage> {
   final NumberFormat currencyFormat =
       NumberFormat.compactCurrency(locale: 'tl');
   bool isDelivery = false;
+
+  Future<CartItem?> _onEditVariant(CartItem item) async {
+    final provider = Provider.of<ProductNotifier>(context, listen: false);
+    final product = await provider.fetchSingle(item.id);
+
+    return await showModalBottomSheet<CartItem?>(
+      context: context,
+      builder: (context) {
+        Variant? variant;
+        int quantity = 1;
+
+        return StatefulBuilder(builder: (context, setState) {
+          return SizedBox(
+            height: 256,
+            child: Padding(
+              padding: ThemeComponents.defaultPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    Translations.of(context)!.select_variant,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: product?.variants.map((v) {
+                          return ChoiceChip(
+                            label: Text(v.name),
+                            selected: v == variant,
+                            onSelected: (_) {
+                              setState(() => variant = v);
+                            },
+                          );
+                        }).toList() ??
+                        [],
+                  ),
+                  SizedBox(height: ThemeComponents.defaultSpacing),
+                  if (variant != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Translations.of(context)!.field_quantity,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                        NumericStepper(
+                          value: quantity,
+                          onChanged: (x) {
+                            setState(() => quantity = x);
+                          },
+                        )
+                      ],
+                    ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      child: Text(Translations.of(context)!.button_continue),
+                      onPressed: variant != null && quantity != 0
+                          ? () {
+                              if (variant != null) {
+                                final cartItem = CartItem(
+                                  id: item.id,
+                                  name: item.name,
+                                  imageUrl: item.imageUrl,
+                                  quantity: quantity,
+                                  variant: variant!,
+                                );
+
+                                Navigator.pop(context, cartItem);
+                              }
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
 
   Widget getBottom(List<CartItem> cartItems) {
     return Material(
@@ -129,6 +223,7 @@ class _CartPageState extends State<CartPage> {
       );
 
       await Provider.of<OrderNotifier>(context, listen: false).insert(order);
+      await Provider.of<CartNotifier>(context, listen: false).reset();
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translations.of(context)!.feedback_order_sent),
@@ -139,6 +234,7 @@ class _CartPageState extends State<CartPage> {
   void _onAction(CartItem item, CartAction action) async {
     switch (action) {
       case CartAction.edit:
+        _onEdit(item);
         break;
       case CartAction.remove:
         await _onRemove(item);
@@ -157,7 +253,17 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Future<void> _onEdit() async {}
+  Future<void> _onEdit(CartItem item) async {
+    final cartItem = await _onEditVariant(item);
+    if (cartItem != null) {
+      await Provider.of<CartNotifier>(context, listen: false).update(cartItem);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translations.of(context)!.feedback_updated_in_cart),
+      ));
+    }
+  }
+
   Future<void> _onRemove(CartItem item) async {
     final response = await _showRemovePrompt(item);
     if (response == true) {

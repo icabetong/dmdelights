@@ -45,6 +45,20 @@
         }
       }
     },
+    "order_quantity_and_variant": "{count} {variant}",
+    "@order_quantity_and_variant": {
+      "description": "Interpolate the order quantity and variant name",
+      "placeholders": {
+        "variant": {
+          "type": "String",
+          "example": "Large"
+        },
+        "count": {
+          "type": "int",
+          "example": "2"
+        }
+      }
+    },
     "button_signin": "Login",
     "button_signup": "Register",
     "button_signout": "Logout",
