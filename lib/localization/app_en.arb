@@ -56,10 +56,12 @@
     "button_save": "Save",
     "button_edit": "Edit",
     "button_remove": "Remove",
+    "button_send": "Send",
     "button_signin_anonymous": "I'll create an account later",
     "feedback_authenticating": "Authenticating",
     "feedback_profile_updated": "Profile Updated",
     "feedback_address_updated": "Address Updated",
+    "feedback_recovery_email_sent": "Recovery email sent",
     "feedback_added_to_cart": "Item added to cart",
     "feedback_remove_from_cart": "Item removed from cart",
     "feedback_updated_in_cart": "Item updated in cart",
@@ -69,6 +71,10 @@
     "tab_info": "Info",
     "tab_address": "Address",
     "tab_security": "Security",
+    "secure_your_account": "Secure Your Account",
+    "secure_your_account_subtitle": "If you need to change your password you can do it here.",
+    "recover_your_account": "Recover Your Account",
+    "recover_your_account_subtitle": "If you forgot your account you can reset it here.",
     "dialog_signout_message": "Are you sure you want to logout your account? You'll need to enter your email and password next time.",
     "dialog_remove_cart_item": "Remove {item}?",
     "@dialog_remove_cart_item": {
@@ -80,7 +86,19 @@
         }
       }
     },
-    "dialog_remove_cart_item_message": "This action cannot be undone.",
+    "dialog_remove_cart_item_message": "You'll need to add this item again if you change your mind.",
+    "dialog_change_password": "Change Password",
+    "dialog_reset_password": "Reset Password",
+    "dialog_reset_password_message": "We will send the recovery code at: {email}.",
+    "@dialog_reset_password_message": {
+      "description": "Interpolate the email address in the dialog message",
+      "placeholders": {
+        "email": {
+          "type": "String",
+          "example": "johndoe@example.com"
+        }
+      }
+    },
     "terms_and_conditions": "Terms and Conditions",
     "privacy_policy": "Privacy Policy"
 }

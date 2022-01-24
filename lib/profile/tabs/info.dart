@@ -6,9 +6,8 @@ import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:provider/provider.dart';
 
 class InfoTab extends StatefulWidget {
-  InfoTab({Key? key, required this.profile}) : super(key: key);
-
-  Profile profile;
+  const InfoTab({Key? key, required this.profile}) : super(key: key);
+  final Profile profile;
 
   @override
   State<InfoTab> createState() => _InfoTabState();

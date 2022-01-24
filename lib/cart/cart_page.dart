@@ -78,7 +78,7 @@ class _CartPageState extends State<CartPage> {
                 child: Text(
                   Translations.of(context)!.button_proceed_to_checkout,
                 ),
-                onPressed: () {
+                onPressed: cartItems.isEmpty ? null : () {
                   _onCheckout(cartItems);
                 },
               ),

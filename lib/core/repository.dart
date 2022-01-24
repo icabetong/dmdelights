@@ -132,7 +132,6 @@ class CartRepository extends Repository<CartItem> {
 
 class OrderRepository extends Repository<Order> {
   static const _name = "orders";
-  static const _products = "products";
   final auth = Infrastructure.auth;
   final firestore = Infrastructure.firestore;
 
