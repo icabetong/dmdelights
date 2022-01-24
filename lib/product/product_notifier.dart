@@ -10,4 +10,8 @@ class ProductNotifier extends ChangeNotifier {
   ProductNotifier() {
     _products = _repository.fetch();
   }
+
+  Future<Product?> fetchSingle(String id) {
+    return _repository.fetchSingle(id);
+  }
 }

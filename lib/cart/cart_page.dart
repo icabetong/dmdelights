@@ -1,6 +1,11 @@
 import 'package:dm_delights/cart/cart_item.dart';
 import 'package:dm_delights/cart/cart_list.dart';
 import 'package:dm_delights/cart/cart_notifier.dart';
+import 'package:dm_delights/core/infrastructure.dart';
+import 'package:dm_delights/orders/order.dart';
+import 'package:dm_delights/orders/order_notifier.dart';
+import 'package:dm_delights/product/product_page.dart';
+import 'package:dm_delights/shared/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:intl/intl.dart';
@@ -73,13 +78,33 @@ class _CartPageState extends State<CartPage> {
                 child: Text(
                   Translations.of(context)!.button_proceed_to_checkout,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _onCheckout(cartItems);
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onCheckout(List<CartItem> cartItems) async {
+    final userId = Infrastructure.auth.currentUser?.uid;
+
+    if (userId != null) {
+      final order = Order(
+        id: randomId(),
+        cartItems: cartItems,
+        ownerId: userId,
+      );
+
+      await Provider.of<OrderNotifier>(context, listen: false).insert(order);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translations.of(context)!.feedback_order_sent),
+      ));
+    }
   }
 
   void _onAction(CartItem item, CartAction action) async {
@@ -92,10 +117,31 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  void _onSelect(CartItem cartItem) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductPage(
+          productId: cartItem.id,
+        ),
+      ),
+    );
+  }
+
   Future<void> _onEdit() async {}
   Future<void> _onRemove(CartItem item) async {
     final response = await _showRemovePrompt(item);
-    if (response == true) {}
+    if (response == true) {
+      Provider.of<CartNotifier>(context, listen: false).remove(item);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            Translations.of(context)!.feedback_remove_from_cart,
+          ),
+        ),
+      );
+    }
   }
 
   Future<bool?> _showRemovePrompt(CartItem item) async {
@@ -106,7 +152,9 @@ class _CartPageState extends State<CartPage> {
           title: Text(
             Translations.of(context)!.dialog_remove_cart_item(item.name),
           ),
-          content: Text(Translations.of(context)!.dialog_signout_message),
+          content: Text(
+            Translations.of(context)!.dialog_remove_cart_item_message,
+          ),
           actions: <Widget>[
             TextButton(
               child: Text(Translations.of(context)!.button_remove),
@@ -146,6 +194,7 @@ class _CartPageState extends State<CartPage> {
                     children: [
                       CartList(
                         cartItems: snapshot.data!,
+                        onSelect: _onSelect,
                         onAction: _onAction,
                       ),
                       const Spacer(flex: 2),

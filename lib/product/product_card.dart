@@ -41,7 +41,8 @@ class ProductCard extends StatelessWidget {
               Text(
                 Translations.of(context)!.price_starts_at(
                   Variant.format(
-                    Variant.getLowestPrice(product.variants).price,
+                    Variant.getLowestPrice(product.variants.values.toList())
+                        .price,
                   ),
                 ),
                 style: const TextStyle(color: Colors.grey),
@@ -53,10 +54,7 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProductPage(
-              product: product,
-              category: category,
-            ),
+            builder: (_) => ProductPage(product: product),
           ),
         );
       },

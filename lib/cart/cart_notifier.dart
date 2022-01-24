@@ -1,6 +1,6 @@
 import 'package:dm_delights/cart/cart_item.dart';
 import 'package:dm_delights/core/repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 class CartNotifier extends ChangeNotifier {
   final _repository = CartRepository();
@@ -37,7 +37,8 @@ class CartNotifier extends ChangeNotifier {
   static double getTotal(List<CartItem> cartItems) {
     double price = 0;
     for (var e in cartItems) {
-      price += e.variant.price;
+      num amount = e.variant.price * e.quantity;
+      price += amount;
     }
     return price;
   }

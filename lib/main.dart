@@ -8,6 +8,7 @@ import 'package:dm_delights/category/category_notifier.dart';
 import 'package:dm_delights/core/infrastructure.dart';
 import 'package:dm_delights/home/home.dart';
 import 'package:dm_delights/localization/locales.dart';
+import 'package:dm_delights/orders/order_notifier.dart';
 import 'package:dm_delights/product/product_notifier.dart';
 import 'package:dm_delights/profile/profile_notifier.dart';
 import 'package:dm_delights/shared/theme.dart';
@@ -67,6 +68,9 @@ class _DMDelightsState extends State<DMDelights> {
         ),
         ChangeNotifierProvider<ProfileNotifier>(
           create: (_) => ProfileNotifier(),
+        ),
+        ChangeNotifierProvider<OrderNotifier>(
+          create: (_) => OrderNotifier(),
         )
       ],
       child: MaterialApp(

@@ -6,7 +6,7 @@ class Product {
   String category;
   String? type;
   String? imageUrl;
-  List<Variant> variants;
+  Map<String, Variant> variants;
 
   Product({
     required this.id,
@@ -14,7 +14,7 @@ class Product {
     required this.category,
     this.type,
     this.imageUrl,
-    this.variants = const [],
+    this.variants = const {},
   });
 
   bool isCorrectType(String type) {
@@ -22,9 +22,11 @@ class Product {
   }
 
   static Product fromMap(Map<String, dynamic> doc) {
-    Iterable? _variants = doc['variants'];
-    List<Map<String, dynamic>> variants =
-        _variants?.map((x) => Map<String, dynamic>.from(x)).toList() ?? [];
+    Map<String, dynamic>? _variants = doc['variants'] == null
+        ? {}
+        : Map<String, dynamic>.from(doc['variants']);
+    Map<String, Variant> variants = Map.fromIterables(
+        _variants.keys, _variants.values.map((v) => Variant.fromMap(v)));
 
     return Product(
       id: doc['id'],
@@ -32,7 +34,7 @@ class Product {
       category: doc['category'],
       type: doc['type'],
       imageUrl: doc['imageUrl'],
-      variants: variants.map((v) => Variant.fromMap(v)).toList(),
+      variants: variants,
     );
   }
 }

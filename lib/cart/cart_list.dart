@@ -6,10 +6,12 @@ class CartList extends StatelessWidget {
   const CartList({
     Key? key,
     required this.cartItems,
+    required this.onSelect,
     required this.onAction,
   }) : super(key: key);
 
   final List<CartItem> cartItems;
+  final Function(CartItem) onSelect;
   final Function(CartItem, CartAction) onAction;
 
   @override
@@ -19,6 +21,7 @@ class CartList extends StatelessWidget {
       itemBuilder: (_, index) {
         return CartListItem(
           cartItem: cartItems[index],
+          onSelect: onSelect,
           onAction: onAction,
         );
       },
@@ -32,9 +35,11 @@ class CartListItem extends StatelessWidget {
   const CartListItem({
     Key? key,
     required this.cartItem,
+    required this.onSelect,
     required this.onAction,
   }) : super(key: key);
   final CartItem cartItem;
+  final Function(CartItem) onSelect;
   final Function(CartItem, CartAction) onAction;
 
   @override
@@ -53,10 +58,14 @@ class CartListItem extends StatelessWidget {
         },
         itemBuilder: (context) => CartAction.values.map((action) {
           return PopupMenuItem<CartAction>(
+            value: action,
             child: Text(action.getLocalization(context)),
           );
         }).toList(),
       ),
+      onTap: () {
+        onSelect(cartItem);
+      },
     );
   }
 }
