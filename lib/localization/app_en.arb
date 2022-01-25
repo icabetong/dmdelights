@@ -64,6 +64,7 @@
     "button_signout": "Logout",
     "button_cancel": "Cancel",
     "button_continue": "Continue",
+    "button_change": "Change",
     "button_forgot_password": "Forgot Password",
     "button_add_to_cart": "Add to Cart",
     "button_proceed_to_checkout": "Proceed to Checkout",
@@ -113,6 +114,8 @@
         }
       }
     },
+    "dialog_enter_old_password": "Enter your old password",
+    "dialog_enter_new_password": "Enter desired password",
     "empty_cart": "You have an empty cart",
     "empty_products": "This section doesn't have products",
     "terms_and_conditions": "Terms and Conditions",
