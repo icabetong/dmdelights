@@ -1,6 +1,7 @@
 import 'package:dm_delights/cart/cart_item.dart';
 import 'package:dm_delights/cart/cart_notifier.dart';
 import 'package:dm_delights/product/product.dart';
+import 'package:dm_delights/product/product_editor.dart';
 import 'package:dm_delights/product/product_notifier.dart';
 import 'package:dm_delights/shared/custom/numeric.dart';
 import 'package:dm_delights/shared/theme.dart';
@@ -175,6 +176,13 @@ class _ProductPageState extends State<ProductPage> {
 
           return const Center(child: CircularProgressIndicator());
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ProductEditor()));
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
