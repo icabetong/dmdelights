@@ -24,6 +24,24 @@ class ProductRepository extends Repository<Product> {
   static const _name = "products";
   final firestore = Infrastructure.firestore;
 
+  Future<void> insert(Product product) async {
+    return await firestore
+        .collection(_name)
+        .doc(product.id)
+        .set(product.toMap());
+  }
+
+  Future<void> update(Product product) async {
+    return await firestore
+        .collection(_name)
+        .doc(product.id)
+        .set(product.toMap());
+  }
+
+  Future<void> remove(Product product) async {
+    return await firestore.collection(_name).doc(product.id).delete();
+  }
+
   @override
   Future<List<Product>> fetch() async {
     final result = await firestore.collection(_name).get();

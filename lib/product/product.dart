@@ -21,6 +21,17 @@ class Product {
     return this.type?.toLowerCase() == type.toLowerCase();
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'type': type,
+      'imageUrl': imageUrl,
+      'variants': variants,
+    };
+  }
+
   static Product fromMap(Map<String, dynamic> doc) {
     Iterable? _variants = doc['variants'];
     List<Map<String, dynamic>> variants =
