@@ -31,9 +31,9 @@ class _ProductEditorState extends State<ProductEditor> {
     final variants = _variants;
     final variant = Variant(variantName, double.parse(variantPrice), true);
     if (index < 0) {
-      variants[index] = variant;
-    } else {
       variants.add(variant);
+    } else {
+      variants[index] = variant;
     }
     setState(() => _variants = variants);
   }

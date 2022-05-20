@@ -28,7 +28,7 @@ class Product {
       'category': category,
       'type': type,
       'imageUrl': imageUrl,
-      'variants': variants,
+      'variants': variants.map((v) => Variant.toMap(v)).toList(),
     };
   }
 
