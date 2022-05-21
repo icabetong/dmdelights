@@ -18,8 +18,10 @@ dependencies:
   firebase_core: ^1.11.0
   firebase_analytics: ^9.0.5
   firebase_auth: ^3.3.5
+  firebase_storage: ^10.2.16
   cloud_firestore: ^3.1.6
   animations: ^2.0.2
+  image_picker: ^0.8.5+3
 
 dev_dependencies:
   flutter_test:

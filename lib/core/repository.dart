@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dm_delights/cart/cart_item.dart';
 import 'package:dm_delights/category/category.dart';
@@ -23,6 +25,15 @@ class CategoryRepository extends Repository<Category> {
 class ProductRepository extends Repository<Product> {
   static const _name = "products";
   final firestore = Infrastructure.firestore;
+  final storage = Infrastructure.storage;
+
+  Future<String> upload(String id, File image) async {
+    final imageRef = storage.ref().child('product_images/$id');
+    final task = imageRef.putFile(image);
+
+    final url = await (await task).ref.getDownloadURL();
+    return url;
+  }
 
   Future<void> insert(Product product) async {
     return await firestore
