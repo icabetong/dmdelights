@@ -25,27 +25,28 @@ class _CategoryPageState extends State<CategoryPage> {
 
     return DefaultTabController(
       length: subcategories.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.category.name),
-          bottom: TabBar(
-            indicator: DotIndicator(
-              color: Theme.of(context).colorScheme.primary,
+      child: Consumer<ProductNotifier>(builder: (context, notifier, _) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.category.name),
+            bottom: TabBar(
+              indicator: DotIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              isScrollable: true,
+              tabs:
+                  subcategories.map((s) => Tab(text: s.toUpperCase())).toList(),
             ),
-            isScrollable: true,
-            tabs: subcategories.map((s) => Tab(text: s)).toList(),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'cart');
+                },
+              )
+            ],
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.shopping_cart_outlined),
-              onPressed: () {
-                Navigator.pushNamed(context, 'cart');
-              },
-            )
-          ],
-        ),
-        body: Consumer<ProductNotifier>(builder: (context, notifier, _) {
-          return FutureBuilder<List<Product>>(
+          body: FutureBuilder<List<Product>>(
             future: notifier.products,
             builder: (_, snapshot) {
               if (snapshot.hasData) {
@@ -59,6 +60,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                   products: data.where((d) {
                                     return d.isCorrectType(s);
                                   }).toList(),
+                                  onRefresh: notifier.onRefresh,
                                 ))
                             .toList(),
                       )
@@ -80,9 +82,9 @@ class _CategoryPageState extends State<CategoryPage> {
                 child: CircularProgressIndicator(),
               );
             },
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

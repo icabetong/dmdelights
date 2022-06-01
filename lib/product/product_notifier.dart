@@ -14,4 +14,8 @@ class ProductNotifier extends ChangeNotifier {
   Future<Product?> fetchSingle(String id) {
     return _repository.fetchSingle(id);
   }
+
+  Future<void> onRefresh() async {
+    _products = _repository.fetch();
+  }
 }

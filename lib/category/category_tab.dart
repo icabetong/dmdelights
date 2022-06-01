@@ -6,11 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 
 class CategoryTab extends StatefulWidget {
-  const CategoryTab({Key? key, required this.category, required this.products})
+  const CategoryTab(
+      {Key? key,
+      required this.category,
+      required this.products,
+      required this.onRefresh})
       : super(key: key);
 
   final Category category;
   final List<Product> products;
+  final Future<void> Function() onRefresh;
 
   @override
   _CategoryTabState createState() => _CategoryTabState();
@@ -20,17 +25,20 @@ class _CategoryTabState extends State<CategoryTab> {
   @override
   Widget build(BuildContext context) {
     return widget.products.isNotEmpty
-        ? GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: widget.products.length,
-            itemBuilder: (context, index) {
-              final product = widget.products[index];
-              return ProductCard(
-                product: product,
-                category: widget.category,
-              );
-            },
+        ? RefreshIndicator(
+            onRefresh: widget.onRefresh,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemCount: widget.products.length,
+              itemBuilder: (context, index) {
+                final product = widget.products[index];
+                return ProductCard(
+                  product: product,
+                  category: widget.category,
+                );
+              },
+            ),
           )
         : Status(
             icon: Icons.shopping_bag_outlined,
